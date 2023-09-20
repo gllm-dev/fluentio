@@ -2,8 +2,9 @@ package fluentio
 
 import (
 	"encoding/json"
-	"github.com/fluent/fluent-logger-golang/fluent"
 	"io"
+
+	"github.com/fluent/fluent-logger-golang/fluent"
 )
 
 // Writer is an io.Writer that writes to fluentd.
@@ -12,7 +13,7 @@ type Writer struct {
 	tag    string
 }
 
-var _ io.Writer = (*Writer)(nil)
+var _ io.WriteCloser = (*Writer)(nil)
 
 // New creates a new Writer.
 // It accepts a variadic number of options that can be used to configure the Writer.
@@ -66,4 +67,9 @@ func (f *Writer) Write(p []byte) (n int, err error) {
 	}
 
 	return len(p), nil
+}
+
+// Close is the implementation of io.Closer.
+func (f *Writer) Close() error {
+	return f.client.Close()
 }
