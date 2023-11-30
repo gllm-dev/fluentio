@@ -4,9 +4,10 @@ import "github.com/fluent/fluent-logger-golang/fluent"
 
 // Config is used to configure the Writer.
 type Config struct {
-	fluentConfig *fluent.Config
-	basicConfig  *BasicConfig
-	tag          string
+	fluentConfig            *fluent.Config
+	basicConfig             *BasicConfig
+	tag                     string
+	discardWritesAfterClose bool
 }
 
 // BasicConfig is used to configure the Writer with a basic configuration.
@@ -38,5 +39,12 @@ func WithFluentConfig(config *fluent.Config) func(*Config) {
 func WithTag(tag string) func(*Config) {
 	return func(c *Config) {
 		c.tag = tag
+	}
+}
+
+// WithDiscardWritesAfterClose returns a function that can be used to configure the Writer to discard writes after Close()
+func WithDiscardWritesAfterClose() func(*Config) {
+	return func(c *Config) {
+		c.discardWritesAfterClose = true
 	}
 }
